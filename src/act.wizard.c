@@ -6269,7 +6269,7 @@ ACMD(do_cset)
     // Procura a perícia pelo nome para ser mais amigável que usar ID
     for (skill_id = 1; skill_id <= MAX_CRAFT_SKILLS; skill_id++) {
         // is_abbrev é uma função padrão para abreviações
-        if (is_abbrev(arg2, craft_skills[skill_id].name)) {
+        if (is_abbrev(arg2, craft_skill_list[skill_id].name)) {
             found_skill = TRUE;
             break;
         }
