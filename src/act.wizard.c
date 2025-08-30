@@ -6242,6 +6242,7 @@ ACMD(do_portal)
     mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s created portal%s from %d to %d (timer: %s)",
            GET_NAME(ch), bidirectional ? "s" : "", world[IN_ROOM(ch)].number, dest_vnum, timer_buf);
 }
+
 ACMD(do_cset)
 {
     char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH], arg3[MAX_INPUT_LENGTH];
