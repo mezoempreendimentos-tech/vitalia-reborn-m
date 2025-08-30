@@ -1,6 +1,6 @@
 #ifndef _CRAFTING_H_
 #define _CRAFTING_H_
-
+#include "crskill.h"
 /* --- Constantes e Definições --- */
 
 // Arquivos de dados para o sistema de crafting
