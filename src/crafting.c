@@ -96,37 +96,6 @@ void free_recipes(void) {
     }
 }
 
-void load_crafting_skills(void) {
-    FILE *fp;
-    char line[256];
-    
-    if (!(fp = fopen(CS_FILE, "r"))) {
-        log1("SYSERR: Não foi possível abrir o arquivo de perícias de crafting: %s", CS_FILE);
-        return;
-    }
-    log1("...Carregando perícias de crafting de %s", CS_FILE);
-
-    while(get_line(fp, line)) {
-        if (*line == '$') break;
-        struct craft_skill_data *skill;
-        CREATE(skill, struct craft_skill_data, 1);
-        skill->id = atoi(strtok(line, "~"));
-        skill->name = strdup(strtok(NULL, "~"));
-        skill->next = craft_skill_list;
-        craft_skill_list = skill;
-    }
-    fclose(fp);
-}
-
-void free_crafting_skills(void) {
-    struct craft_skill_data *skill, *next_skill;
-    for (skill = craft_skill_list; skill; skill = next_skill) {
-        next_skill = skill->next;
-        if (skill->name) free(skill->name);
-        free(skill);
-    }
-}
-
 /* --- Funções de Lógica de Qualidade --- */
 int calculate_quality(struct char_data *ch, int crskill_id, int difficulty, int material_bonus) {
     if (rand_number(1, 100) == 1) return QUALITY_OBRA_PRIMA;
