@@ -10,7 +10,6 @@ struct craft_skill_data {
 };
 
 // Declaração do array global que conterá as definições das perícias.
-// O 'extern' diz que este array existe e será definido em outro arquivo (crskill.c).
 extern struct craft_skill_data craft_skills[];
 
 // Protótipo da função que irá preencher o array acima com as perícias.
