@@ -6247,7 +6247,7 @@ ACMD(do_cset)
 {
     char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH], arg3[MAX_INPUT_LENGTH];
     struct char_data *vict;
-    int skill_id, value;
+    int crskill_id, value;
     bool found_skill = FALSE;
 
     // Padrão do MUD para parsear três argumentos
@@ -6267,9 +6267,9 @@ ACMD(do_cset)
     }
 
     // Procura a perícia pelo nome para ser mais amigável que usar ID
-    for (skill_id = 1; skill_id <= MAX_CRAFT_SKILLS; skill_id++) {
+    for (crskill_id = 1; crskill_id <= MAX_CRAFT_SKILLS; crskill_id++) {
         // is_abbrev é uma função padrão para abreviações
-        if (is_abbrev(arg2, craft_skill_list[skill_id].name)) {
+        if (is_abbrev(arg2, craft_skill_list[crskill_id].name)) {
             found_skill = TRUE;
             break;
         }
@@ -6299,11 +6299,11 @@ ACMD(do_cset)
     }
 
     // Ação principal: Seta a perícia
-    GET_CRAFT_SKILL(vict, skill_id) = value;
+    GET_CRAFT_SKILL(vict, crskill_id) = value;
 
     // Feedback para o admin e para o jogador, padrão do MUD
-    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skill_list[skill_id].name, skill_id, GET_NAME(vict), value);
-    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skill_list[skill_id].name, (void *)(long)value, TO_VICT);
+    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skill_list[crskill_id].name, crskill_id, GET_NAME(vict), value);
+    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skill_list[crskill_id].name, (void *)(long)value, TO_VICT);
     
     // Salva o personagem, como em 'do_set'
     save_char(vict);
