@@ -110,6 +110,8 @@ ACMD(do_where);
 ACMD(do_who);
 ACMD(do_whois);
 ACMD(do_evaluate);
+ACMD(do_cset); // <-- ADICIONE ESTA LINHA AQUI
+
 
 /*****************************************************************************
  * Begin Functions and defines for act.item.c
