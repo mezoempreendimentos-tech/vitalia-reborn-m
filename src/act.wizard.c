@@ -6242,3 +6242,68 @@ ACMD(do_portal)
     mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s created portal%s from %d to %d (timer: %s)",
            GET_NAME(ch), bidirectional ? "s" : "", world[IN_ROOM(ch)].number, dest_vnum, timer_buf);
 }
+ACMD(do_cset)
+{
+    char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH], arg3[MAX_INPUT_LENGTH];
+    struct char_data *vict;
+    int skill_id, value;
+    bool found_skill = FALSE;
+
+    // Padrão do MUD para parsear três argumentos
+    three_arguments(argument, arg1, arg2, arg3);
+
+    // Verificação de sintaxe, similar a outros comandos no arquivo
+    if (!*arg1 || !*arg2 || !*arg3) {
+        send_to_char(ch, "Uso: cset <jogador> <nome da perícia> <valor>\r\n");
+        send_to_char(ch, "Exemplo: cset ryu ferraria 100\r\n");
+        return;
+    }
+
+    // Encontra o jogador alvo, padrão do MUD
+    if (!(vict = get_char_vis(ch, arg1, NULL, FIND_CHAR_WORLD))) {
+        send_to_char(ch, "%s", CONFIG_NOPERSON);
+        return;
+    }
+
+    // Procura a perícia pelo nome para ser mais amigável que usar ID
+    for (skill_id = 1; skill_id <= MAX_CRAFT_SKILLS; skill_id++) {
+        // is_abbrev é uma função padrão para abreviações
+        if (is_abbrev(arg2, craft_skills[skill_id].name)) {
+            found_skill = TRUE;
+            break;
+        }
+    }
+
+    if (!found_skill) {
+        send_to_char(ch, "Nenhuma perícia de crafting encontrada com o nome '%s'.\r\n", arg2);
+        return;
+    }
+    
+    value = atoi(arg3);
+
+    // Validações, seguindo o padrão de 'do_set' e 'do_wizutil'
+    if (IS_NPC(vict)) {
+        send_to_char(ch, "Você só pode definir perícias de crafting em jogadores.\r\n");
+        return;
+    }
+
+    if (GET_LEVEL(vict) >= GET_LEVEL(ch) && vict != ch) {
+        send_to_char(ch, "Talvez isso não seja uma boa ideia...\r\n");
+        return;
+    }
+
+    if (value < 0 || value > 100) {
+        send_to_char(ch, "O valor da perícia deve ser entre 0 e 100.\r\n");
+        return;
+    }
+
+    // Ação principal: Seta a perícia
+    GET_CRAFT_SKILL(vict, skill_id) = value;
+
+    // Feedback para o admin e para o jogador, padrão do MUD
+    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skills[skill_id].name, skill_id, GET_NAME(vict), value);
+    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skills[skill_id].name, (void *)(long)value, TO_VICT);
+    
+    // Salva o personagem, como em 'do_set'
+    save_char(vict);
+}
