@@ -309,5 +309,3 @@ ACMD(do_craft)
 ACMD(do_legacy) {
     send_to_char(ch, "O sistema de Legado ainda está sendo desenvolvido.\r\n");
 }
-
-ACMD(do_cset); // <-- ADICIONE ESTA LINHA AQUI
