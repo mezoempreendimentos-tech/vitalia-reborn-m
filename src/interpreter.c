@@ -136,6 +136,7 @@ cpp_extern const struct command_info cmd_info[] = {
     {"compact", "comp", POS_DEAD, do_gen_tog, 0, SCMD_COMPACT, CMD_NOARG},
     {"copyover", "copyover", POS_DEAD, do_copyover, LVL_GRGOD, 0, CMD_NOARG},
     {"credits", "cred", POS_DEAD, do_gen_ps, 0, SCMD_CREDITS, CMD_NOARG},
+    { "cset", "cset", POS_DEAD, do_cset, LVL_GRGOD, SCMD_CSET}, // <-- ADICIONADA ESTA LINHA
     {"date", "da", POS_DEAD, do_date, LVL_IMMORT, SCMD_DATE, CMD_NOARG},
     {"dc", "dc", POS_DEAD, do_dc, LVL_GOD, 0, CMD_ONEARG},
     {"deposit", "depo", POS_STANDING, do_not_here, 1, 0, CMD_ONEARG},
