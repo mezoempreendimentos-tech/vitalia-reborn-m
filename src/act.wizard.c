@@ -6302,8 +6302,8 @@ ACMD(do_cset)
     GET_CRAFT_SKILL(vict, skill_id) = value;
 
     // Feedback para o admin e para o jogador, padrão do MUD
-    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skills[skill_id].name, skill_id, GET_NAME(vict), value);
-    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skills[skill_id].name, (void *)(long)value, TO_VICT);
+    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skill_list[skill_id].name, skill_id, GET_NAME(vict), value);
+    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skill_list[skill_id].name, (void *)(long)value, TO_VICT);
     
     // Salva o personagem, como em 'do_set'
     save_char(vict);
