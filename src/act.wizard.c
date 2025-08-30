@@ -39,6 +39,7 @@
 #include "graph.h"
 #include <math.h>
 #include "crafting.h"
+#include "crskill.h"
 
 /* external functions*/
 extern char *get_spell_name(int vnum);
@@ -6247,10 +6248,10 @@ ACMD(do_cset)
 {
     char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH], arg3[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
     struct char_data *vict;
-    int crskill_id, value;
+    int skill_id, value;
     bool found_skill = FALSE;
 
-    // CORREÇÃO: Usando o método padrão do seu MUD para pegar 3 argumentos
+    // Usando half_chop, que é a função correta do seu MUD para pegar múltiplos argumentos.
     half_chop(argument, arg1, buf);
     half_chop(buf, arg2, arg3);
 
@@ -6265,13 +6266,15 @@ ACMD(do_cset)
         return;
     }
 
-    // Procura a perícia pelo nome
-    for (crskill_id = 1; crskill_id <= MAX_CRAFT_SKILLS; crskill_id++) {
-        if (!strcmp(craft_skill_list[crskill_id].name, "NOME_NAO_USADO"))
+    // CORREÇÃO: A lógica agora percorre o array 'craft_skills'
+    for (skill_id = 1; skill_id <= MAX_CRAFT_SKILLS; skill_id++) {
+        // Ignora slots de perícia não utilizados
+        if (!strcmp(craft_skills[skill_id].name, "NOME_NAO_USADO"))
             continue;
-        if (is_abbrev(arg2, craft_skill_list[crskill_id].name)) {
+        
+        if (is_abbrev(arg2, craft_skills[skill_id].name)) {
             found_skill = TRUE;
-            break;
+            break; // Encontrou a perícia, pode parar o loop
         }
     }
 
@@ -6286,16 +6289,21 @@ ACMD(do_cset)
         send_to_char(ch, "Você só pode definir perícias de crafting em jogadores.\r\n");
         return;
     }
+    
+    if (GET_LEVEL(vict) >= GET_LEVEL(ch) && vict != ch) {
+        send_to_char(ch, "Talvez isso não seja uma boa ideia...\r\n");
+        return;
+    }
 
     if (value < 0 || value > 100) {
         send_to_char(ch, "O valor da perícia deve ser entre 0 e 100.\r\n");
         return;
     }
 
-    GET_CRAFT_SKILL(vict, crskill_id) = value;
+    GET_CRAFT_SKILL(vict, skill_id) = value;
 
-    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skill_list[crskill_id].name, crskill_id, GET_NAME(vict), value);
-    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skill_list[crskill_id].name, (void *)(long)value, TO_VICT);
+    send_to_char(ch, "Você definiu a perícia '%s' (#%d) de %s para %d.\r\n", craft_skills[skill_id].name, skill_id, GET_NAME(vict), value);
+    act("$n ajustou sua perícia de '$t' para $v.", FALSE, ch, (void *)craft_skills[skill_id].name, (void *)(long)value, TO_VICT);
     
     save_char(vict);
 }
